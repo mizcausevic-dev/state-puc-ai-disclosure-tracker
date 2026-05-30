@@ -1,0 +1,15 @@
+{
+  "name": "state-puc-ai-disclosure-tracker",
+  "version": "0.1.0",
+  "description": "EnergyTech jurisdiction-spanning lifecycle tracker for state Public Utility Commission AI rules, FERC orders, NERC reliability standards, DOE executive-order implementation, TSA Security Directives, and ISO/RTO Business Practice Manuals. Covers utility-regulator + grid-reliability-regulator AI rules — distinct from LegalTech / GovTech state trackers.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "verify": "node src/verify.mjs",
+    "test": "npm run verify"
+  },
+  "dependencies": {
+    "ajv": "^8.17.0",
+    "ajv-formats": "^3.0.1"
+  }
+}

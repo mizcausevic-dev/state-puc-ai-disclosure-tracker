@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mizcausevic-dev/state-puc-ai-disclosure-tracker/blob/main/schema/disclosure-event.schema.json",
+  "title": "State PUC + FERC + NERC + DOE + TSA AI Disclosure Lifecycle Event",
+  "description": "A timestamped lifecycle event in a US state Public Utility Commission AI rule, FERC order, NERC standard, DOE executive-order implementation, TSA Security Directive, or ISO/RTO Business Practice Manual that governs how regulated utilities + grid operators use AI in operations, planning, and tariff design. DISTINCT from state bar trackers (LegalTech) and state government trackers (GovTech) — this one covers utility-regulator-issued + grid-reliability-regulator-issued rules on AI in energy operations.",
+  "type": "object",
+  "required": ["event_id", "jurisdiction", "timestamp", "lifecycle_state", "citation"],
+  "additionalProperties": false,
+  "properties": {
+    "event_id": {"type": "string", "minLength": 1},
+    "jurisdiction": {
+      "type": "string",
+      "pattern": "^(US|US-[A-Z]{2}-(PUC|UTC|PSC|ICC|DPU|OCC|CC)|ERCOT|MISO|PJM|CAISO|NYISO|ISO-NE|SPP|FERC|NERC|NERC-WECC|NERC-MRO|NERC-RFC|NERC-SERC|NERC-NPCC|NERC-TRE|DOE|TSA|EPA)$",
+      "description": "US (federal) | state PUC (varies by state — CPUC=US-CA-PUC, PSC=US-NY-PSC, PUC=US-TX-PUC, ICC=US-IL-ICC, DPU=US-MA-DPU, UTC=US-WA-UTC, etc.) | ISO/RTO (ERCOT, MISO, PJM, CAISO, NYISO, ISO-NE, SPP) | federal agency / standards body (FERC, NERC + regional entities, DOE, TSA, EPA)"
+    },
+    "timestamp": {"type": "string", "format": "date-time"},
+    "lifecycle_state": {
+      "type": "string",
+      "enum": [
+        "notice-of-proposed-rulemaking",
+        "in-stakeholder-comment",
+        "staff-guidance-issued",
+        "order-issued",
+        "guidance-issued",
+        "tariff-approval-granted",
+        "pilot-program-approved",
+        "mandatory-compliance-effective",
+        "enforcement-active",
+        "enforcement-action-published",
+        "waiver-granted",
+        "advisory-non-binding",
+        "rescinded",
+        "superseded",
+        "under-review"
+      ]
+    },
+    "regulatory_vehicle": {
+      "type": "string",
+      "enum": [
+        "state-puc-formal-order",
+        "state-puc-rulemaking",
+        "state-puc-staff-guidance",
+        "state-puc-tariff-approval",
+        "federal-ferc-order",
+        "federal-ferc-rule",
+        "federal-nerc-standard",
+        "federal-nerc-glossary-update",
+        "federal-doe-executive-order",
+        "federal-tsa-security-directive",
+        "federal-epa-section-114",
+        "iso-rto-business-practice-manual",
+        "iso-rto-tariff-revision"
+      ]
+    },
+    "citation": {
+      "type": "object",
+      "required": ["short_label", "jurisdictional_uri"],
+      "additionalProperties": false,
+      "properties": {
+        "short_label":          {"type": "string"},
+        "long_title":           {"type": "string"},
+        "jurisdictional_uri":   {"type": "string", "format": "uri"},
+        "docket_or_order_id":   {"type": "string"},
+        "session_year":         {"type": "integer", "minimum": 1900, "maximum": 2100}
+      }
+    },
+    "effective_date": {"type": "string", "format": "date"},
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "covered_operations": {
+          "type": "array",
+          "items": {"type": "string", "enum": [
+            "wholesale-market-bidding",
+            "wholesale-market-clearing",
+            "load-forecasting",
+            "demand-response-dispatch",
+            "outage-detection",
+            "outage-restoration-prioritization",
+            "load-shed-allocation",
+            "transmission-switching",
+            "protective-relay-coordination",
+            "generator-dispatch",
+            "der-aggregation",
+            "ev-charging-deployment",
+            "rate-class-design",
+            "tariff-filing-preparation",
+            "pipeline-pressure-control",
+            "pipeline-leak-detection",
+            "cybersecurity-monitoring",
+            "physical-security-monitoring",
+            "energy-efficiency-program-targeting",
+            "low-income-program-enrollment"
+          ]}
+        },
+        "covered_actors": {
+          "type": "array",
+          "items": {"type": "string", "enum": [
+            "investor-owned-utility",
+            "publicly-owned-utility",
+            "cooperative-utility",
+            "rural-electric-cooperative",
+            "competitive-retail-electric-provider",
+            "wholesale-market-participant",
+            "iso-rto-operator",
+            "regional-transmission-organization",
+            "balancing-authority",
+            "transmission-operator",
+            "distribution-utility",
+            "interstate-gas-pipeline-operator",
+            "intrastate-gas-pipeline-operator",
+            "ai-vendor-to-utility"
+          ]}
+        }
+      }
+    },
+    "obligation_kinds": {
+      "type": "array",
+      "items": {"type": "string", "enum": [
+        "ai-tool-disclosure-in-tariff-filing-required",
+        "prudency-review-of-ai-decisions-required",
+        "bes-cyber-system-categorization-attestation-required",
+        "nerc-cip-attestation-required",
+        "tsa-pipeline-cybersecurity-controls-required",
+        "ferc-order-2222-der-aggregation-fairness-required",
+        "environmental-justice-impact-assessment-required",
+        "rate-impact-disclosure-required",
+        "demand-response-program-fairness-required",
+        "ev-charging-deployment-equity-required",
+        "load-shed-allocation-published-required",
+        "outage-restoration-priority-published-required",
+        "ai-vendor-prudency-attestation-required",
+        "cybersecurity-incident-reporting-cip-008-tier-1-required",
+        "cybersecurity-incident-reporting-cisa-shields-tier-2-required",
+        "supply-chain-risk-management-cip-013-required",
+        "human-operator-in-loop-required",
+        "nerc-certified-operator-attestation-required",
+        "ot-it-boundary-data-diode-attestation-required",
+        "low-income-customer-impact-assessment-required",
+        "consumer-disclosure-on-ai-mediated-bills-required"
+      ]}
+    },
+    "issuing_authority": {
+      "type": "object",
+      "required": ["name"],
+      "additionalProperties": false,
+      "properties": {
+        "name":     {"type": "string"},
+        "long_name":{"type": "string"},
+        "url":      {"type": "string", "format": "uri"}
+      }
+    },
+    "supersedes_event_id": {"type": "string"},
+    "amends_event_id":     {"type": "string"},
+    "notes":               {"type": "string"},
+    "tags":                {"type": "array", "items": {"type": "string"}}
+  }
+}
